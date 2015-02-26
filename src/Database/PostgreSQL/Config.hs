@@ -18,12 +18,17 @@ import Data.Aeson
 import Data.ByteString ( ByteString )
 import Data.Pool
 import Data.Time
+import Data.Typeable
+import GHC.Generics
 
 import qualified Database.PostgreSQL.Simple as PG
 
 -- | Connection pool. Must be created from settings using
 -- 'createPGPool'
-newtype PGPool = PGPool (Pool PG.Connection)
+newtype PGPool =
+    PGPool
+    { unPGPool :: (Pool PG.Connection)
+    } deriving ( Show, Typeable, Generic )
 
 {- | Configuration parsed from json or yaml file, or obtained by any
 other way. Example configuration yml is:
