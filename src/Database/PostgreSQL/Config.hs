@@ -1,9 +1,11 @@
 module Database.PostgreSQL.Config
-       (
+       ( -- * Types
          PostgresConf(..)
        , PGPool(..)
+         -- * Pool creation
        , createPGPool
        , pingPGPool
+         -- * Helpers for __postgresql-query__
        , withPGPool
        , withPGPoolPrim
        ) where
@@ -19,8 +21,25 @@ import Data.Time
 
 import qualified Database.PostgreSQL.Simple as PG
 
--- | Connection pool. Must be created from settings using 'createPGPool'
+-- | Connection pool. Must be created from settings using
+-- 'createPGPool'
 newtype PGPool = PGPool (Pool PG.Connection)
+
+{- | Configuration parsed from json or yaml file, or obtained by any
+other way. Example configuration yml is:
+
+@
+database:    "dbname"
+host:        "127.0.0.1"        \# optional
+port:        "5432"             \# optional
+user:        "dbuser"
+password:    "pass"
+poolsize:    "10"               \# optional maximum connections in pool
+pooltimeout: "60"               \# optional minimum connection lifetime
+poolstripes: "1"                \# optional count of stripes in pool
+@
+
+-}
 
 data PostgresConf = PostgresConf
     { pgConnStr  :: ByteString
@@ -58,6 +77,7 @@ instance FromJSON PostgresConf where
                  , pgPoolStripes = pStripes
                  }
 
+-- | Create pool from parsed configuration
 createPGPool :: PostgresConf -> IO PGPool
 createPGPool PostgresConf{..} =
     fmap PGPool
@@ -69,8 +89,8 @@ createPGPool PostgresConf{..} =
     pgPoolSize
 
 
-{- | Combinator for simple implementation of 'withPGConnection' method.
-typical usage is:
+{- | Combinator for simple implementation of 'withPGConnection' method
+from package __postgresql-query__.  Typical usage is:
 
 @
 instance HasPostgres (HandlerT App IO) where
