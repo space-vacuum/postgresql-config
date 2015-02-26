@@ -21,10 +21,9 @@ poolstripes: "1"                # optional count of stripes in pool
 and then in your program something like that
 
 ```haskell
-
-pool <- decodeFile "pgconfig.yml"
-         >>= maybe (fail "Could not parse pgconfig.yml")
-             createPGPool
+conf <- decodeFile "pgconfig.yml"
+         >>= maybe (fail "Could not parse pgconfig.yml") return
+pool <- createPGPool conf
 pingPGPool pool
 ```
 
