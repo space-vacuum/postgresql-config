@@ -10,12 +10,16 @@ maintainer:          s9gf4ult@gmail.com
 
 category:            Database
 build-type:          Simple
-
 cabal-version:       >=1.10
 
 extra-source-files: examples/Main.hs
                   , examples/pgconfig.yml
                   , README.md
+
+homepage: https://bitbucket.org/s9gf4ult/postgresql-config
+source-repository head
+  type: git
+  location: git@bitbucket.org:s9gf4ult/postgresql-config.git
 
 library
   hs-source-dirs:    src
