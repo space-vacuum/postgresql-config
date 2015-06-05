@@ -31,7 +31,7 @@ library
                     , FlexibleContexts
                     , OverloadedStrings
 
-  build-depends:     base >=4.7
+  build-depends:     base >=4.6  &&  <= 5.0
                    , aeson
                    , bytestring
                    , monad-control
