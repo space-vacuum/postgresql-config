@@ -4,6 +4,7 @@ module Database.PostgreSQL.Config
        , PGPool(..)
          -- * Pool creation
        , createPGPool
+       , createPGPoolWithCallback
        , pingPGPool
          -- * Helpers for __postgresql-query__
        , withPGPool
@@ -84,15 +85,35 @@ instance FromJSON PostgresConf where
 
 -- | Create pool from parsed configuration
 createPGPool :: PostgresConf -> IO PGPool
-createPGPool PostgresConf{..} =
+createPGPool = flip createPGPoolWithCallback mock
+  where mock = const $ return ()
+
+type PGCallback = PG.Connection -> IO ()
+
+-- | Create pool from parsed configuration,
+-- which enables to fire a callback after creating each connection.
+createPGPoolWithCallback
+  :: PostgresConf -- ^ connection data
+  -> PGCallback   -- ^ callback action, can be used for performing arbitrary action on connection
+  -> IO PGPool
+createPGPoolWithCallback pgc@PostgresConf{..} callback =
     fmap PGPool
     $ createPool
-    (PG.connectPostgreSQL pgConnStr)
+    (connectAndExecQuery pgc callback)
     PG.close
     pgPoolStripes
     pgPoolTimeout
     pgPoolSize
 
+-- | Create pool from parsed configuration and execute callback
+-- for each connection.
+connectAndExecQuery :: PostgresConf
+                    -> PGCallback
+                    -> IO PG.Connection
+connectAndExecQuery PostgresConf{..} callback = do
+    conn <- PG.connectPostgreSQL pgConnStr
+    _ <- callback conn
+    return conn
 
 {- | Combinator for simple implementation of 'withPGConnection' method
 from package __postgresql-query__.  Typical usage is:
