@@ -9,13 +9,13 @@ Add separate file or section inside your existing config like that
 
 ```yml
 database:    "dbname"
-host:        "127.0.0.1"        # optional
-port:        "5432"             # optional
+host:        "127.0.0.1"       # optional
+port:         5432             # optional
 user:        "dbuser"
 password:    "pass"
-poolsize:    "10"               # optional maximum connections in pool
-pooltimeout: "60"               # optional minimum connection lifetime
-poolstripes: "1"                # optional count of stripes in pool
+poolsize:    10               # optional maximum connections in pool
+pooltimeout: 60               # optional minimum connection lifetime
+poolstripes: 1                # optional count of stripes in pool
 ```
 
 and then in your program something like that
