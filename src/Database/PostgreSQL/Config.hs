@@ -26,8 +26,7 @@ import qualified Database.PostgreSQL.Simple as PG
 
 -- | Connection pool. Must be created from settings using
 -- 'createPGPool'
-newtype PGPool =
-    PGPool
+newtype PGPool = PGPool
     { unPGPool :: (Pool PG.Connection)
     } deriving ( Show, Typeable, Generic )
 
@@ -94,7 +93,8 @@ type PGCallback = PG.Connection -> IO ()
 -- which enables to fire a callback after creating each connection.
 createPGPoolWithCallback
   :: PostgresConf -- ^ connection data
-  -> PGCallback   -- ^ callback action, can be used for performing arbitrary action on connection
+  -> PGCallback   -- ^ callback action, can be used for performing
+                  -- arbitrary action on connection
   -> IO PGPool
 createPGPoolWithCallback pgc@PostgresConf{..} callback =
     fmap PGPool
