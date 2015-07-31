@@ -14,7 +14,9 @@ cabal-version:       >=1.10
 
 extra-source-files: CHANGELOG.md
                   , README.md
-                  , examples/Main.hs
+                  , examples/*.hs
+                  , examples/LICENSE
+                  , examples/pgconfig-examples.cabal
                   , examples/pgconfig.yml
 
 homepage: https://bitbucket.org/s9gf4ult/postgresql-config

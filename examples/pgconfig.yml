@@ -1,5 +1,5 @@
 database:    "dbname"
-host:        "127.0.0.1"        # optional
+host:        "127.0.0.1"       # optional
 port:         5432             # optional
 user:        "dbuser"
 password:    "pass"
