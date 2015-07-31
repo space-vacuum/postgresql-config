@@ -1,5 +1,5 @@
 name:                postgresql-config
-version:             0.0.3
+version:             0.1.0
 
 synopsis:            Types for easy adding postgresql configuration to your program
 
@@ -14,7 +14,9 @@ cabal-version:       >=1.10
 
 extra-source-files: CHANGELOG.md
                   , README.md
-                  , examples/Main.hs
+                  , examples/*.hs
+                  , examples/LICENSE
+                  , examples/pgconfig-examples.cabal
                   , examples/pgconfig.yml
 
 homepage: https://bitbucket.org/s9gf4ult/postgresql-config
@@ -30,7 +32,6 @@ library
                     , DeriveGeneric
                     , FlexibleContexts
                     , OverloadedStrings
-                    , RecordWildCards
 
   build-depends:     base >=4.6  &&  <= 5.0
                    , aeson

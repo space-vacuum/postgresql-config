@@ -1,0 +1,25 @@
+name:                pgconfig-examples
+version:             0.1.0.0
+synopsis:            examles
+license:             BSD3
+license-file:        LICENSE
+author:              Aleksey Uimanov
+maintainer:          s9gf4ult@gmail.com
+-- copyright:
+category:            Examples
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+executable pgconfig-examples
+  main-is:             Main.hs
+
+  default-extensions:  LambdaCase
+                     , OverloadedStrings
+
+  build-depends:       base >=4.8 && < 5
+                     , yaml
+                     , postgresql-simple
+                     , postgresql-config
+  -- hs-source-dirs:
+  default-language:    Haskell2010
