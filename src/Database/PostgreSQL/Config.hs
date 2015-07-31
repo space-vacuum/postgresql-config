@@ -4,6 +4,7 @@ module Database.PostgreSQL.Config
        , PGPool(..)
          -- * Pool creation
        , createPGPool
+       , PGCallback
        , createPGPoolWithCallback
        , pingPGPool
          -- * Helpers for __postgresql-query__
@@ -96,22 +97,22 @@ createPGPoolWithCallback
   -> PGCallback   -- ^ callback action, can be used for performing
                   -- arbitrary action on connection
   -> IO PGPool
-createPGPoolWithCallback pgc@PostgresConf{..} callback =
+createPGPoolWithCallback pgc callback =
     fmap PGPool
     $ createPool
-    (connectAndExecQuery pgc callback)
-    PG.close
-    pgPoolStripes
-    pgPoolTimeout
-    pgPoolSize
+        (connectAndExecQuery pgc callback)
+        PG.close
+        (pgPoolStripes pgc)
+        (pgPoolTimeout pgc)
+        (pgPoolSize pgc)
 
 -- | Create pool from parsed configuration and execute callback
 -- for each connection.
 connectAndExecQuery :: PostgresConf
                     -> PGCallback
                     -> IO PG.Connection
-connectAndExecQuery PostgresConf{..} callback = do
-    conn <- PG.connectPostgreSQL pgConnStr
+connectAndExecQuery pgc callback = do
+    conn <- PG.connectPostgreSQL $ pgConnStr pgc
     _ <- callback conn
     return conn
 
