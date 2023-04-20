@@ -1,0 +1,2 @@
+import: postgresql-config.config
+with-compiler: ghc-9.4.5
