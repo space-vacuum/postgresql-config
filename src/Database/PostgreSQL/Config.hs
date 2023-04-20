@@ -137,11 +137,16 @@ connectAndExecQuery pgc callback = do
 -- instance HasPostgres (HandlerT App IO) where
 --     withPGConnection = withPGPool appPGPool
 -- @
+#if !MIN_VERSION_resource_pool(0,3,0)
 withPGPool
     :: (MonadReader site m, MonadBaseControl IO m)
     => (site -> PGPool)
     -> (PG.Connection -> m a)
     -> m a
+#else
+withPGPool
+    :: MonadReader r IO => (r -> PGPool) -> (PG.Connection -> IO a) -> IO a
+#endif
 withPGPool extract action = do
     (PGPool pool) <- asks extract
     withResource pool action
@@ -152,11 +157,15 @@ withPGPool extract action = do
 -- instance HasPostgres (OurMonadT IO) where
 --     withPGConnection = withPGPoolPrim $ getPGPool \<$\> getSomeThing
 -- @
+#if !MIN_VERSION_resource_pool(0,3,0)
 withPGPoolPrim
     :: MonadBaseControl IO m
     => m PGPool
     -> (PG.Connection -> m a)
     -> m a
+#else
+withPGPoolPrim :: IO PGPool -> (PG.Connection -> IO a) -> IO a
+#endif
 withPGPoolPrim pget action = do
     (PGPool pool) <- pget
     withResource pool action
